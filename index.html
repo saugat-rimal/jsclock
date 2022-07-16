@@ -5,141 +5,352 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Js clock</title>
+    <title>Clock</title>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            --primaryColor: #748DA6;
-            --secondaryColor: #9CB4CC;
-            --thirdColor: #D3CEDF;
-            --fourthColor: #F2D7D9;
-        }
-
+        html,
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            justify-content: center;
-            gap: 4rem;
-            font-family: Arial, Helvetica, sans-serif;
-            color: var(--primaryColor);
+            height: 100%;
+            background: #dde1e7;
+            position: relative;
+        }
 
+        .icon-large {
+            width: 220px;
+            height: 220px;
+            border-radius: 38px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .icon-clock {
+            overflow: hidden;
+            background-color: #dde1e7;
+            border-radius: 50%;
+            box-shadow: -3px -3px 7px #ffffff73,
+                2px 2px 5px #5e687949;
         }
 
         .clock {
-            height: 30rem;
-            width: 30rem;
-            border: 1.2rem solid var(--primaryColor);
+            width: 192px;
+            height: 192px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            padding: 2rem;
-        }
-
-        .clock-face {
-            transform: translateY(-3px);
-            height: 100%;
-            width: 100%;
-        }
-
-        .hand {
-            height: 6px;
-            width: 50%;
-            background-color: var(--secondaryColor);
+            background-color: #f1f1f1;
             position: absolute;
             top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 2px 2px 5px #babecc,
+                inset -5px -5px 10px #ffffff73;
+        }
+
+        .clock ol {
+            list-style-type: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+
+        .clock ol li {
+            counter-increment: labelCounter;
+            position: absolute;
+            font-size: 1.25rem;
+        }
+
+        .clock ol li::before {
+            font-family: Helvetica, sans-serif;
+            content: counter(labelCounter);
+        }
+
+        .clock ol li:nth-child(1) {
+            right: 55px;
+            top: 20px;
+        }
+
+        .clock ol li:nth-child(2) {
+            right: 25px;
+            top: 50px;
+        }
+
+        .clock ol li:nth-child(3) {
+            right: 12px;
+            top: 85px;
+        }
+
+        .clock ol li:nth-child(4) {
+            right: 25px;
+            top: 125px;
+        }
+
+        .clock ol li:nth-child(5) {
+            right: 55px;
+            top: 150px;
+        }
+
+        .clock ol li:nth-child(6) {
+            right: 90px;
+            top: 160px;
+        }
+
+        .clock ol li:nth-child(7) {
+            right: 125px;
+            top: 150px;
+        }
+
+        .clock ol li:nth-child(8) {
+            right: 155px;
+            top: 125px;
+        }
+
+        .clock ol li:nth-child(9) {
+            right: 165px;
+            top: 85px;
+        }
+
+        .clock ol li:nth-child(10) {
+            right: 150px;
+            top: 50px;
+        }
+
+        .clock ol li:nth-child(11) {
+            right: 120px;
+            top: 20px;
+        }
+
+        .clock ol li:nth-child(12) {
+            right: 85px;
+            top: 10px;
+        }
+
+
+
+
+        @-webkit-keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        #hour {
+            background-color: #303030;
+            height: 14px;
+            width: 14px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -7px;
+            margin-left: -7px;
             border-radius: 50%;
-            transform-origin: 100%;
-            transform: rotate(90deg);
-            transition: all 0.05sec;
-            transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
         }
 
-        h1 {
-            color: var(--primaryColor);
+        #hour::before,
+        #hour::after {
+            content: "";
+            display: block;
+            position: absolute;
         }
 
-        h1:hover {
-            color: var(--secondaryColor);
+        #hour::before {
+            width: 8px;
+            height: 65px;
+            background: #303030;
+            border-radius: 5px;
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translate(-50%, 0);
         }
 
-        .digitalbox {
-            display: flex;
-            flex-direction: row;
+        #min {
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: #303030;
+            position: absolute;
+            top: 50%;
+            left: 50%
         }
 
-        #time {
-            font-size: 2rem;
-            text-align: center;
-            line-height: 2.5rem;
+        #min::before,
+        #min::after {
+            content: "";
+            display: block;
+            position: absolute;
+        }
+
+        #min::before {
+            background: #303030;
+            width: 6px;
+            height: 90px;
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            border-radius: 5px;
+
+        }
+
+        #sec {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #dd3e1c;
+            border: 2px solid #e13e1b;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -4px;
+            margin-left: -4px;
+        }
+
+        #sec::before,
+        #sec::after {
+            content: "";
+            display: block;
+            position: absolute;
+        }
+
+        #sec::before {
+            width: 2px;
+            height: 105px;
+            background: #e13e1b;
+            bottom: 2px;
+            border-radius: 50%;
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            transition: ease;
+        }
+
+
+        #digitalbox {
+            font-family: Helvetica, sans-serif;
+            font-size: 24px;
+            display: inline;
+            position: absolute;
+            top: 75%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            /* box-shadow: -3px -3px 7px #ffffff73,
+                2px 2px 5px rgba(94, 104, 121, 0.288);
+            padding: 15px 25px;
+            border-radius: 30px; */
+
+        }
+
+        .digital {
+            background-color: #f1f1f1;
+            padding: 15px 30px;
+            border-radius: 30px;
+            box-shadow: inset 2px 2px 5px #babecc,
+                inset -5px -5px 10px #ffffff73;
         }
     </style>
 </head>
 
 <body>
-
-    <h1>Your Time</h1>
-
-    <div class="clock">
-        <div class="clock-face">
-            <div class="hand hour-hand"></div>
-            <div class="hand min-hand"></div>
-            <div class="hand sec-hand"></div>
+    <div class="icon-clock icon-large">
+        <div class="clock">
+            <ol>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ol>
+            <!-- clock hand -->
+            <div id="hour"></div>
+            <div id="min"></div>
+            <div id="sec"></div>
         </div>
     </div>
 
-    <div class="digital-time">
-        <div class="digitalbox">
-            <p id="time">
-            </p>
+    <div id="digitalbox">
+        <div class="digital">
 
-            <span id="digitalhour"></span>
-            <span id="digitalmin"></span>
+            <span id="digitalhour"></span> &#58;
+            <span id="digitalmin"></span> &#58;
+            <span id="digitalsec"></span> &#58;
+            <span id="digitalamorpm"></span>
+
+
+            <!-- <div id="time"> </div> -->
+
         </div>
+
     </div>
 
     <script>
-        const secHand = document.querySelector('.sec-hand');
-        const minHand = document.querySelector('.min-hand');
-        const hourHand = document.querySelector('.hour-hand');
+        const hourHand = document.querySelector('#hour');
+        const minHand = document.querySelector('#min');
+        const secHand = document.querySelector('#sec');
+        const digitalHour = document.querySelector('#digitalhour');
+        const digitalMin = document.querySelector('#digitalmin');
+        const digitalSec = document.querySelector('#digitalsec');
+        const digitalAmorpm = document.querySelector('#digitalamorpm');
+
+
+        setInterval(setDate, 1000); //1 second = 1000 milliseconds.
 
 
         function setDate() {
             const now = new Date();
             const seconds = now.getSeconds();
-            const secondDegree = ((seconds / 60) * 360) + 90;
+            const secondDegree = ((seconds / 60) * 360);
             secHand.style.transform = `rotate(${secondDegree}deg)`;
 
             const minutes = now.getMinutes();
-            const minuteDegree = ((minutes / 60) * 360) + 90;
+            const minuteDegree = ((minutes / 60) * 360);
             minHand.style.transform = `rotate(${minuteDegree}deg)`;
 
             const hours = now.getHours();
-            const hour = (hours / 12);
-            const hourDegree = ((hours / 12) * 360) + 90;
+            const hourDegree = ((hours / 12) * 360);
             hourHand.style.transform = `rotate(${hourDegree}deg)`;
 
 
-            document.getElementById('time').innerHTML = Date();
 
-            // document.getElementById('digitalhour').innerHTML = now.getHours();
-            // document.getElementById('digitalmin').innerHTML = now.getMinutes();
+
+            digitalHour.innerHTML = now.getHours() - 12;
+            digitalMin.innerHTML = now.getMinutes();
+            digitalSec.innerHTML = now.getSeconds();
+            var ampm = (hours >= 12) ? "PM" : "AM";
+            digitalAmorpm.innerHTML = ampm;
+
+
+            //Another Method using toLocaleTimeString 
+
+            // const localTime = new Date()
+            //     .toLocaleTimeString([], {
+            //         hour: '2-digit',
+            //         minute: '2-digit',
+            //         second: '2-digit',
+            //         hour12: true
+            //     })
+            //     .toUpperCase();
+
+            // document.getElementById('time').innerHTML = localTime;
+
 
 
         }
-
-
-
-        setInterval(setDate, 1000);
     </script>
 
 </body>
